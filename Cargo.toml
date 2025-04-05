@@ -1,0 +1,29 @@
+[package]
+edition = "2021"
+name    = "esp32-h2"
+version = "0.1.0"
+
+[[bin]]
+name = "esp32-h2"
+path = "./src/bin/main.rs"
+
+[dependencies]
+critical-section = "1.2.0"
+esp-backtrace = { version = "0.15.1", features = ["esp32h2", "panic-handler", "exception-handler", "println"],path = "/Users/jan/code/github.com/esp-rs/esp-hal/esp-backtrace/" }
+esp-hal          = { version = "1.0.0-beta.0", features = ["esp32h2", "unstable"], path = "/Users/jan/code/github.com/esp-rs/esp-hal/esp-hal/"}
+esp-println = { version = "0.13.1", features = ["esp32h2"],path = "/Users/jan/code/github.com/esp-rs/esp-hal/esp-println" }
+nb = "1.1.0"
+
+[profile.dev]
+# Rust debug is too slow.
+# For debug builds always builds with some optimization
+opt-level = "s"
+
+[profile.release]
+codegen-units    = 1     # LLVM can perform better optimizations using a single thread
+debug            = 2
+debug-assertions = false
+incremental      = false
+lto              = 'fat'
+opt-level        = 's'
+overflow-checks  = false
