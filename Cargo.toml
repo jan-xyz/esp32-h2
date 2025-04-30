@@ -6,13 +6,24 @@ version = "0.1.0"
 [[bin]]
 name = "esp32-h2"
 path = "./src/bin/main.rs"
+test = false
+bench = false
 
 [dependencies]
 critical-section = "1.2.0"
-esp-backtrace = { version = "0.15.1", features = ["esp32h2", "panic-handler", "exception-handler", "println"],path = "/Users/jan/code/github.com/esp-rs/esp-hal/esp-backtrace/" }
-esp-hal          = { version = "1.0.0-beta.0", features = ["esp32h2", "unstable"], path = "/Users/jan/code/github.com/esp-rs/esp-hal/esp-hal/"}
-esp-println = { version = "0.13.1", features = ["esp32h2"],path = "/Users/jan/code/github.com/esp-rs/esp-hal/esp-println" }
-nb = "1.1.0"
+embassy-sync     = { version = "0.6.2", default-features = false }
+embassy-executor = { version = "0.7.0", default-features = false }
+esp-hal-embassy  = { features = ["esp32h2", "executors"], git = "https://github.com/esp-rs/esp-hal" }
+esp-backtrace    = { version = "0.15.1", features = ["esp32h2", "panic-handler", "exception-handler", "println"] , git = "https://github.com/esp-rs/esp-hal"}
+esp-ieee802154   = { version = "0.5.0", features = ["esp32h2"] }
+esp-hal          = { features = ["esp32h2", "unstable"], git = "https://github.com/esp-rs/esp-hal" }
+esp-println      = { version = "0.13.1", features = ["esp32h2"], git = "https://github.com/esp-rs/esp-hal"}
+nb               = "1.1.0"
+rand_core        = "0.9.3"
+rs-matter        = { git = "https://github.com/project-chip/rs-matter", default_features=false}
+openthread       = { features = ["udp"], git = "https://github.com/esp-rs/openthread" }
+static_cell      = { version = "2.1.0", default-features = false }
+heapless         = "0.8.0"
 
 [profile.dev]
 # Rust debug is too slow.

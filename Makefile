@@ -1,8 +1,8 @@
 build:
-	cargo build
+	cargo build --release
 
 flash:
-	cargo espflash flash
+	cargo espflash flash --release
 
 monitor:
-	cargo espflash flash --monitor
+	cargo espflash flash --monitor --release
