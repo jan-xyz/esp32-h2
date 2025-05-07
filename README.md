@@ -8,6 +8,19 @@ will work with Matter over Thread.
 - Soil moisture
 - Ambient Light
 
-## Literature
+## Libraries
+
+### Protocol
+
+- <https://github.com/project-chip/rs-matter>
+- <https://github.com/esp-rs/openthread>
+
+### Hardware
+
+- <https://github.com/embassy-rs/embassy/>
+- <https://github.com/esp-rs/esp-hal>
+
+## Prior Art
 
 - <https://github.com/bjoernQ/matter-rs-experiment>
+- <https://github.com/28Smiles/embassy-matter-rs/>
