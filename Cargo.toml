@@ -5,25 +5,41 @@ version = "0.1.0"
 
 [[bin]]
 name = "esp32-h2"
-path = "./src/bin/main.rs"
+path = "./src/main.rs"
 test = false
 bench = false
 
 [dependencies]
 critical-section = "1.2.0"
+embedded-storage = "0.3.1"
+embassy-net = { version = "0.6.0", features = [
+  "dhcpv4",
+  "medium-ethernet",
+  "tcp",
+  "udp",
+  "multicast"
+] }
 embassy-sync     = { version = "0.6.2", default-features = false }
-embassy-executor = { version = "0.7.0", default-features = false }
-esp-hal-embassy  = { features = ["esp32h2", "executors"], git = "https://github.com/esp-rs/esp-hal" }
-esp-backtrace    = { version = "0.15.1", features = ["esp32h2", "panic-handler", "exception-handler", "println"] , git = "https://github.com/esp-rs/esp-hal"}
+embassy-executor = { version = "0.7.0", default-features = false, features =["task-arena-size-20480"] }
+embassy-time     = { version = "0.4.0", features = ["generic-queue-8"] }
+embassy-futures  = { version = "0.1" }
+esp-hal-embassy  = { version = "0.6.0", features = ["esp32h2", "executors"] }
+esp-backtrace    = { version = "0.15.1", features = ["esp32h2", "panic-handler", "exception-handler", "println"] }
 esp-ieee802154   = { version = "0.5.0", features = ["esp32h2"] }
-esp-hal          = { features = ["esp32h2", "unstable"], git = "https://github.com/esp-rs/esp-hal" }
-esp-println      = { version = "0.13.1", features = ["esp32h2"], git = "https://github.com/esp-rs/esp-hal"}
+esp-hal          = { version = "0.23.1", features = ["esp32h2", "unstable" ] }
+esp-alloc        = { version = "0.7.0", features = [ ] }
+esp-println      = { version = "0.13.1", features = ["esp32h2"]}
+esp-storage      = { version = "0.4.0", features = ["esp32h2"] }
 nb               = "1.1.0"
 rand_core        = "0.9.3"
-rs-matter        = { git = "https://github.com/project-chip/rs-matter", default_features=false}
-openthread       = { features = ["udp"], git = "https://github.com/esp-rs/openthread" }
+rs-matter        = { version = "0.1.1", git = "https://github.com/project-chip/rs-matter", default_features=false, features = [
+  "rustcrypto"
+]}
+openthread       = { features = ["udp", "srp", "esp-ieee802154", "isupper"], git = "https://github.com/esp-rs/openthread" }
 static_cell      = { version = "2.1.0", default-features = false }
 heapless         = "0.8.0"
+tinyrlibc        = { version = "0.5", default-features = false, features = ["utoa", "strtoul"] }
+
 
 [profile.dev]
 # Rust debug is too slow.
