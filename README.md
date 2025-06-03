@@ -10,15 +10,11 @@ will work with Matter over Thread.
 
 ## Libraries
 
-### Protocol
-
-- <https://github.com/project-chip/rs-matter>
-- <https://github.com/esp-rs/openthread>
-
-### Hardware
-
-- <https://github.com/embassy-rs/embassy/>
 - <https://github.com/esp-rs/esp-hal>
+- <https://github.com/esp-rs/openthread>
+- <https://github.com/embassy-rs/embassy/>
+- <https://github.com/project-chip/rs-matter>
+- <https://github.com/ivmarkov/rs-matter-embassy>
 
 ## Prior Art
 
