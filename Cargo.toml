@@ -1,56 +1,63 @@
 [package]
-edition = "2021"
-name    = "esp32-h2"
+name = "esp32-h2-matter-thread"
 version = "0.1.0"
+edition = "2021"
+license = "MIT OR Apache-2.0"
 
 [[bin]]
-name = "esp32-h2"
-path = "./src/main.rs"
-test = false
-bench = false
+name = "light_thread"
+path = "src/main.rs"
+harness = false
+
+# All patches point to jan-xyz forks with Matter-over-Thread fixes
+[patch.crates-io]
+rs-matter = { git = "https://github.com/jan-xyz/rs-matter", branch = "matter-thread-fixes" }
+rs-matter-stack = { git = "https://github.com/jan-xyz/rs-matter-stack", branch = "matter-thread-fixes" }
+openthread = { git = "https://github.com/jan-xyz/openthread", branch = "matter-thread-fixes" }
+
+[patch.'https://github.com/sysgrok/rs-matter']
+rs-matter = { git = "https://github.com/jan-xyz/rs-matter", branch = "matter-thread-fixes" }
+
+[patch.'https://github.com/sysgrok/rs-matter-stack.git']
+rs-matter-stack = { git = "https://github.com/jan-xyz/rs-matter-stack", branch = "matter-thread-fixes" }
+
+[patch.'https://github.com/sysgrok/openthread.git']
+openthread = { git = "https://github.com/jan-xyz/openthread", branch = "matter-thread-fixes" }
+
+[features]
+default = ["esp32c6"]
+esp32c6 = ["esp-rtos/esp32c6", "esp-hal/esp32c6", "esp-backtrace/esp32c6", "esp-println/esp32c6", "esp-radio/esp32c6", "esp-storage/esp32c6", "esp-bootloader-esp-idf/esp32c6", "esp-metadata-generated/esp32c6", "esp-sync/esp32c6", "portable-atomic/critical-section", "thread"]
+esp32h2 = ["esp-rtos/esp32h2", "esp-hal/esp32h2", "esp-backtrace/esp32h2", "esp-println/esp32h2", "esp-radio/esp32h2", "esp-storage/esp32h2", "esp-bootloader-esp-idf/esp32h2", "esp-metadata-generated/esp32h2", "esp-sync/esp32h2", "portable-atomic/critical-section", "thread"]
+thread = ["rs-matter-embassy/openthread"]
 
 [dependencies]
-critical-section = "1.2.0"
-embedded-storage = "0.3.1"
-embassy-net = { version = "0.6.0", features = [
-  "dhcpv4",
-  "medium-ethernet",
-  "tcp",
-  "udp",
-  "multicast"
-] }
-embassy-sync     = { version = "0.6.2", default-features = false }
-embassy-executor = { version = "0.7.0", default-features = false, features =["task-arena-size-20480"] }
-embassy-time     = { version = "0.4.0", features = ["generic-queue-8"] }
-embassy-futures  = { version = "0.1" }
-esp-hal-embassy  = { version = "0.6.0", features = ["esp32h2", "executors"] }
-esp-backtrace    = { version = "0.15.1", features = ["esp32h2", "panic-handler", "exception-handler", "println"] }
-esp-ieee802154   = { version = "0.5.0", features = ["esp32h2"] }
-esp-hal          = { version = "0.23.1", features = ["esp32h2", "unstable" ] }
-esp-alloc        = { version = "0.7.0", features = [ ] }
-esp-println      = { version = "0.13.1", features = ["esp32h2"]}
-esp-storage      = { version = "0.4.0", features = ["esp32h2"] }
-nb               = "1.1.0"
-rand_core        = "0.9.3"
-rs-matter        = { version = "0.1.1", git = "https://github.com/project-chip/rs-matter", default_features=false, features = [
-  "rustcrypto"
-]}
-openthread       = { features = ["udp", "srp", "esp-ieee802154", "isupper"], git = "https://github.com/esp-rs/openthread" }
-static_cell      = { version = "2.1.0", default-features = false }
-heapless         = "0.8.0"
-tinyrlibc        = { version = "0.5", default-features = false, features = ["utoa", "strtoul"] }
-
+log = "0.4"
+embassy-executor = "0.10"
+embassy-embedded-hal = "0.6"
+embassy-futures = "0.1"
+embassy-time = "0.5"
+embassy-sync = "0.7"
+static_cell = "2"
+portable-atomic = "1"
+esp-backtrace = { version = "0.19", features = ["panic-handler", "println"] }
+esp-hal = { version = "1.1", features = ["log-04", "unstable", "exception-handler"] }
+esp-rtos = { version = "0.3", features = ["esp-radio", "embassy"] }
+esp-alloc = { version = "0.10" }
+esp-println = { version = "0.17", features = ["log-04"] }
+esp-radio = { version = "0.18", features = ["ble", "log-04", "unstable"] }
+esp-storage = "0.9"
+esp-sync = "0.2"
+esp-bootloader-esp-idf = { version = "0.5", features = ["log-04"] }
+esp-metadata-generated = "0.4"
+rs-matter-embassy = { git = "https://github.com/jan-xyz/rs-matter-embassy", branch = "matter-thread-fixes", features = ["esp", "log"] }
+tinyrlibc = { version = "0.5", default-features = false, features = ["utoa", "strtoul"] }
 
 [profile.dev]
-# Rust debug is too slow.
-# For debug builds always builds with some optimization
 opt-level = "s"
 
 [profile.release]
-codegen-units    = 1     # LLVM can perform better optimizations using a single thread
-debug            = 2
+codegen-units = 1
+debug = 2
 debug-assertions = false
-incremental      = false
-lto              = 'fat'
-opt-level        = 's'
-overflow-checks  = false
+opt-level = "s"
+overflow-checks = false
